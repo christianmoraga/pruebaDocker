@@ -39,6 +39,39 @@ quantity=0.01&price=2000&recvWindow=5000&timestamp=1611825601400
   curl -H "apikey:22BjeOROKiXJ3NxbR3zjh3uoGcaflPu3VMyBXAg8Jj2J1xVSnY0eB4dzacdE9IWn" -H "secretKey:YtP1BudNOWZE1ag5uzCkh4hIC7qSmQOu797r5EJBFGhxBYivjj8HIX0iiiPof5yG" -X GET 'https://testnet.binanceops.com//vapi/v1/time' 
   
   /vapi/v1/time
+
+
+  curl --silent -X GET https://testnet.binance.vision/api/v3/exchangeInfo
+
+
+
+  O77NKF6KA3FO5EIJ
+
+
+
+Principal
+apikey
+  ucGsCr6I9ehZn5i51MlOIXThWrM6bObvQ91nkpeiIaKMAgM8N7ZGPLbUXPbBdOuV
+
+secretKey
+kjTXifn9ny7kAthuWBuBnM6DOVLKTaHOxxldfWjLdK4dqMwrLLnQPh5ygmQ4y6m1
+
+
+API restrictions
+Enable Reading ==>true
+Enable Spot & Margin Trading ==>false
+Enable Withdrawals ==>false
+Enable Margin Loan, Repay & Transfer ==>false
+Permits Universal Transfer ==>false
+Enable Vanilla Options ==>false
+
+
+https://api1.binance.com
+
+
+
+
+
  
  
  

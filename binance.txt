@@ -72,6 +72,115 @@ https://api1.binance.com
 
 
 
+Particionar base de datos mysql
+ALTER TABLE t1 ADD PARTITION (PARTITION p3 VALUES LESS THAN (2002));
+INFORMATION_SCHEMA.PARTITIONS table directly.
+
+PARTITION_NAME
+TABLE_NAME
+SCHEMA_NAME
+
+
+
+
+Partcion y subparticion
+
+
+ALTER TABLE `Precios`
+PARTITION BY RANGE (TO_DAYS(fecha))
+SUBPARTITION BY HASH(HOUR(fecha))
+SUBPARTITIONS 24 (
+        PARTITION p2021_10_16 VALUES LESS THAN (TO_DAYS("2021-10-17")
+)
+
+
+#para agregar particiones
+ALTER TABLE `Precios` ADD PARTITION (PARTITION p2021_10_14 VALUES LESS THAN (TO_DAYS("2021-10-15")));
+
+
+
+#Busco particiones
+#Busco las particiones existentes en la tabla binance.Precios
+SELECT DISTINCT COUNT(PARTITION_NAME) as total FROM `PARTITIONS` WHERE TABLE_SCHEMA ='binance' AND TABLE_NAME='Precios'
+
+BEGIN
+set @dInicial = current_date();
+set @dPuntero = current_date(); 
+set @dFinal=DATE_ADD(current_date(), INTERVAL 15 DAY);
+set @diferencia=(SELECT DATEDIFF(@dFinal,@dPuntero));
+#SELECT @diferencia as respuesta;
+WHILE (@diferencia>0) DO
+SELECT @diferencia as respuesta;
+
+	SET @NombreParticion=(SELECT DATE_FORMAT(@dPuntero, "p%Y_%m_%d"))
+    SET @existe=(SELECT COUNT(PARTITION_NAME) as total FROM `information_schema`.`PARTITIONS` WHERE TABLE_SCHEMA ='binance' AND TABLE_NAME='Precios' AND PARTITION_NAME=@NombreParticion);
+    IF @existe=0
+        BEGIN
+            ALTER TABLE `Precios` ADD PARTITION (PARTITION @NombreParticion VALUES LESS THAN (TO_DAYS(DATE_ADD(@dPuntero, INTERVAL 1 DAY))));
+        END
+
+
+
+set @dPuntero = date_add(@dPuntero, interval 1 day);
+set @diferencia=(SELECT DATEDIFF(@dFinal,@dPuntero));
+END WHILE; 
+END
+
+WHILE (@counter < DATEDIFF(current_date(), DATE_ADD(current_date(), INTERVAL 15 DAY)  )) DO 
+    print('OK')
+    #ALTER TABLE `Precios` ADD PARTITION (PARTITION p2021_10_14 VALUES LESS THAN (TO_DAYS("2021-10-15")));
+    
+#    INSERT daterange VALUES (DATE_ADD(_fromdate, INTERVAL @counter:=@counter + 1 DAY));
+
+END WHILE;
+
+
+
+ALTER TABLE `Promedios`
+PARTITION BY RANGE (TO_DAYS(fecha))
+SUBPARTITION BY HASH(HOUR(fecha))
+SUBPARTITIONS 24 (
+       PARTITION p2021_10_15 VALUES LESS THAN (TO_DAYS("2021-10-16")
+)
+
+    store_id INT
+)
+
+
+INSERT INTO `Monedas` (Moneda, Descripcion, Estado) SELECT DISTINCT Moneda, '' as Descripcion, 0 as Estado FROM Precios
+
+
  
  
- 
+-------------------------------------------------------------------- 
+https://api.binance.com/sapi/v1/capital/config/getall
+recvWindow	LONG	NO	
+timestamp	LONG	YES
+
+ curl -H "apikey:ucGsCr6I9ehZn5i51MlOIXThWrM6bObvQ91nkpeiIaKMAgM8N7ZGPLbUXPbBdOuV" -H "secretKey:kjTXifn9ny7kAthuWBuBnM6DOVLKTaHOxxldfWjLdK4dqMwrLLnQPh5ygmQ4y6m1" -X GET 'https://testnet.binanceops.com//vapi/v1/time' 
+ apikey
+  ucGsCr6I9ehZn5i51MlOIXThWrM6bObvQ91nkpeiIaKMAgM8N7ZGPLbUXPbBdOuV
+
+secretKey
+kjTXifn9ny7kAthuWBuBnM6DOVLKTaHOxxldfWjLdK4dqMwrLLnQPh5ygmQ4y6m1
+
+
+
+INSERT INTO Promedios SELECT NEW.fecha as fecha,NEW.Moneda as Moneda,avg(a.`Precio`), 900 as Intervalo FROM `Precios` a WHERE a.fecha between DATE_ADD(NEW.fecha, INTERVAL -900 SECOND) AND NEW.fecha AND a.Moneda=NEW.Moneda;
+INSERT INTO Promedios SELECT NEW.fecha as fecha,NEW.Moneda as Moneda,avg(a.`Precio`), 300 as Intervalo FROM `Precios` a WHERE a.fecha between DATE_ADD(NEW.fecha, INTERVAL -300 SECOND) AND NEW.fecha AND a.Moneda=NEW.Moneda;
+INSERT INTO Promedios SELECT NEW.fecha as fecha,NEW.Moneda as Moneda,avg(a.`Precio`), 1800 as Intervalo FROM `Precios` a WHERE a.fecha between DATE_ADD(NEW.fecha, INTERVAL -1800 SECOND) AND NEW.fecha AND a.Moneda=NEW.Moneda;
+INSERT INTO Promedios SELECT NEW.fecha as fecha,NEW.Moneda as Moneda,avg(a.`Precio`), 3600 as Intervalo FROM `Precios` a WHERE a.fecha between DATE_ADD(NEW.fecha, INTERVAL -3600 SECOND) AND NEW.fecha AND a.Moneda=NEW.Moneda
+
+
+
+INSERT INTO DesvEst SELECT NEW.fecha as fecha,NEW.Moneda as Moneda,avg(a.`Precio`)+(STDDEV(a.`Precio`)/2), 3600,'Margen Superior' as metrica as Intervalo FROM `Precios` a WHERE a.fecha between DATE_ADD(NEW.fecha, INTERVAL -3600 SECOND) AND NEW.fecha AND a.Moneda=NEW.Moneda
+
+
+avg(`Precio`)+(STDDEV(`Precio`)/2)
+
+
+
+
+
+
+

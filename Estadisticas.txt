@@ -1,0 +1,26 @@
+Estadisticas
+
+Rango
+Rango intercuartilico
+Varianza
+Desviacion estandar
+Coeficiente de variacion
+
+Ejemplo de pacientes
+Edad        |  xi  |  fi    | xi.fi
+[20,30)     |  25  |  20    | 500
+[30,40)     |  35  |  35    | 1225
+[40,50)     |  45  |  50    | 2250
+[50,60)     |  55  |  49    | 2690
+[60,70)     |  65  |  25    | 1625
+[70,80)     |  75  |  15    | 1125
+[80,90)     |  85  |  6     | 510
+
+
+Edad=Intervalo
+xi = Marca de clase.valor medio de los intervalos
+fi= Frecuencia absoluta. Numero de datos en cada intervalo
+n= a la sumatoria total de pacientes, osea sumatoria de fi
+
+
+Varianza

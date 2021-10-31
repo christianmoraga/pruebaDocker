@@ -194,7 +194,7 @@ def ConsultarPorLocalidad(Localidad):
     mydb=conectardb()
     mycursor = mydb.cursor()
     mycursor.execute("SELECT a.Id as Localidad, b.Id as Provincia, b.IdProvincia as Provincia FROM `ML_Localidades` a INNER JOIN ML_Partidos b ON a.IdPartido=b.Id where a.Id='"+Localidad+"'")
-    myresult = mycursor.fetchone()
+    myresult = mycursor.fetchall()
     return(myresult)
 
 #############################

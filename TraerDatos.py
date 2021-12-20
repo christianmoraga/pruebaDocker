@@ -222,4 +222,4 @@ tChequeos.start()
 
 #curl -v -H "apikey:22BjeOROKiXJ3NxbR3zjh3uoGcaflPu3VMyBXAg8Jj2J1xVSnY0eB4dzacdE9IWn" -H "secretKey:YtP1BudNOWZE1ag5uzCkh4hIC7qSmQOu797r5EJBFGhxBYivjj8HIX0iiiPof5yG" -X GET 'https://testnet.binanceops.com/vapi/v1/position?BTC-200730-9000-C&recvWindow=500000&timestamp=1633710030'
 
- 
+ #prueba

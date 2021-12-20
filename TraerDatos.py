@@ -19,7 +19,7 @@ import numpy
 def conectardb():
     mydb = mysql.connector.connect(
         host="localhost",
-        user="Christian",
+        user="root",
         password="chinito2312",
         database="binance"
     )
